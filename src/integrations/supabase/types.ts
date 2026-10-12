@@ -56,6 +56,50 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_standups: {
+        Row: {
+          blockers: string | null
+          completed_today: string
+          created_at: string
+          date: string
+          id: string
+          mood: string | null
+          tomorrow_plan: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          blockers?: string | null
+          completed_today?: string
+          created_at?: string
+          date: string
+          id?: string
+          mood?: string | null
+          tomorrow_plan?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          blockers?: string | null
+          completed_today?: string
+          created_at?: string
+          date?: string
+          id?: string
+          mood?: string | null
+          tomorrow_plan?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_standups_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           attachment_name: string | null

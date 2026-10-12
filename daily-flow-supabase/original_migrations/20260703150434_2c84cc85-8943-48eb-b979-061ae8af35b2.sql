@@ -1,0 +1,1 @@
+ALTER TABLE public.tasks ADD COLUMN IF NOT EXISTS completion_notes text, ADD COLUMN IF NOT EXISTS project_link text;

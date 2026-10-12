@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { CheckCircle2, Clock, Users, Activity, Loader2 } from 'lucide-react';
+import { useCall } from '@/components/CallModal';
+import { CheckCircle2, Clock, Users, Activity, Loader2, Bell, Phone } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -22,6 +24,7 @@ interface TeamMemberActivity {
 
 const TeamStatus = () => {
     const { user } = useAuth();
+    const { startAudioCall, ringMember } = useCall();
     const [teamActivity, setTeamActivity] = useState<TeamMemberActivity[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -157,6 +160,30 @@ const TeamStatus = () => {
                                 </li>
                             ))}
                         </ul>
+                    </div>
+                )}
+
+                {/* Direct Call & Bell Ring actions */}
+                {user?.userId !== member.user_id && (
+                    <div className="flex items-center gap-2 mt-4 pt-3 border-t border-border/40">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => ringMember(member.user_id, member.name)}
+                            className="h-7 text-xs gap-1.5 flex-1 border-amber-500/30 text-amber-700 dark:text-amber-400 hover:bg-amber-500/10 font-semibold"
+                        >
+                            <Bell className="h-3 w-3 animate-pulse" />
+                            Ring Bell
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => startAudioCall(member.user_id, member.name)}
+                            className="h-7 text-xs gap-1.5 flex-1 border-emerald-500/30 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/10 font-semibold"
+                        >
+                            <Phone className="h-3 w-3" />
+                            Call
+                        </Button>
                     </div>
                 )}
             </CardContent>

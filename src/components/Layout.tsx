@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import LunaAssistant from '@/components/LunaAssistant';
 import { AIAssistantWidget } from '@/components/AIAssistantWidget';
 import NotificationSettings from '@/components/NotificationSettings';
+import OfflineBanner from '@/components/OfflineBanner';
 
 const Layout = () => {
   const { user, logout } = useAuth();
@@ -122,6 +123,7 @@ const Layout = () => {
       )}
 
       <div className="flex-1 flex flex-col overflow-hidden relative">
+        <OfflineBanner />
         {/* Mobile header */}
         <header className="md:hidden flex items-center justify-between px-4 py-3 border-b bg-card/80 backdrop-blur-md sticky top-0 z-10">
           <div className="flex items-center gap-3">

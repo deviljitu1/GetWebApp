@@ -10,6 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import EditTaskDialog from './EditTaskDialog';
 import FinishTaskDialog from './FinishTaskDialog';
+import TaskChecklist from './TaskChecklist';
 
 const statusConfig: Record<TaskStatus, { className: string; label: string }> = {
   'Not Started': { className: 'bg-muted text-muted-foreground border-transparent', label: 'Not Started' },
@@ -178,6 +179,8 @@ const TaskCard = ({ task, showUser, readOnly }: TaskCardProps) => {
                 </div>
               )}
 
+              {/* Subtasks and checklist progress */}
+              <TaskChecklist task={task} />
             </div>
           </div>
 

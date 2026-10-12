@@ -1,0 +1,8 @@
+project_id = "tbigtlfuittunagpyoxk"
+
+[functions.mcp-server]
+verify_jwt = false
+
+[functions.client-report]
+verify_jwt = false
+

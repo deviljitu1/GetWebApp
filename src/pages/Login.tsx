@@ -43,7 +43,11 @@ const Login = () => {
     setError('');
     setLoginLoading(true);
     try {
-      const result = await login(email.trim(), password);
+      const raw = email.trim();
+      const loginEmail = raw.toLowerCase() === 'admin'
+        ? 'admin@admin.com'
+        : (raw.includes('@') ? raw : `${raw}@admin.com`);
+      const result = await login(loginEmail, password);
       if (result.error) {
         setError(result.error);
       } else {
@@ -105,13 +109,13 @@ const Login = () => {
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">ID / Email</Label>
                 <Input
                   id="email"
-                  type="email"
+                  type="text"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  placeholder="name@company.com"
+                  placeholder="admin or name@company.com"
                   required
                   className="h-12 bg-muted/30 border-input/60 focus:bg-background transition-all duration-300"
                 />

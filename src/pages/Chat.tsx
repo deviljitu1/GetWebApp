@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useData } from '@/contexts/DataContext';
-import { Send, Users, MessageSquare, Plus, Search, Info, MoreVertical, Pencil, Trash2, X, Paperclip, Smile, Image as ImageIcon, FileText, ArrowLeft, ChevronDown } from 'lucide-react';
+import { useCall } from '@/components/CallModal';
+import { Send, Users, MessageSquare, Plus, Search, Info, MoreVertical, Pencil, Trash2, X, Paperclip, Smile, Image as ImageIcon, FileText, ArrowLeft, ChevronDown, Bell, Phone } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import {
@@ -39,6 +40,7 @@ interface Message {
 const Chat = () => {
     const { user } = useAuth();
     const { members } = useData(); // We need member list for 1:1 chat selection
+    const { startAudioCall, ringMember } = useCall();
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [selectedUser, setSelectedUser] = useState<string | null>(null); // null = Group Chat
@@ -486,10 +488,34 @@ const Chat = () => {
                                 <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${chatPartner?.name}`} />
                                 <AvatarFallback>{chatPartner?.name.charAt(0)}</AvatarFallback>
                             </Avatar>
-                            <div>
-                                <h3 className="font-bold text-lg leading-none">{chatPartner?.name}</h3>
-                                <p className="text-xs text-muted-foreground capitalize mt-1">{chatPartner?.employee_type}</p>
+                            <div className="flex-1 min-w-0">
+                                <h3 className="font-bold text-lg leading-none truncate">{chatPartner?.name}</h3>
+                                <p className="text-xs text-muted-foreground capitalize mt-1 truncate">{chatPartner?.employee_type}</p>
                             </div>
+                            {chatPartner && (
+                                <div className="flex items-center gap-1.5 ml-auto">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => ringMember(chatPartner.user_id, chatPartner.name)}
+                                        className="h-8 text-xs gap-1 border-amber-500/30 text-amber-700 dark:text-amber-400 hover:bg-amber-500/10 font-semibold px-2.5"
+                                        title="Ring / Bell Teammate"
+                                    >
+                                        <Bell className="h-3.5 w-3.5 animate-pulse" />
+                                        <span className="hidden sm:inline">Ring</span>
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => startAudioCall(chatPartner.user_id, chatPartner.name)}
+                                        className="h-8 text-xs gap-1 border-emerald-500/30 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/10 font-semibold px-2.5"
+                                        title="Start Internet Audio Call"
+                                    >
+                                        <Phone className="h-3.5 w-3.5" />
+                                        <span className="hidden sm:inline">Call</span>
+                                    </Button>
+                                </div>
+                            )}
                         </>
                     ) : (
                         <>

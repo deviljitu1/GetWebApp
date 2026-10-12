@@ -18,6 +18,7 @@ export type TaskAttachment = Tables<'task_attachments'>;
 export type RecurringTemplate = Tables<'recurring_task_templates'>;
 export type ReportShareLink = Tables<'report_share_links'>;
 export type Notification = Tables<'notifications'>;
+export type DailyStandup = Tables<'daily_standups'>;
 
 export interface TaskWithSessions extends Tables<'tasks'> {
   time_sessions: TimeSession[];
