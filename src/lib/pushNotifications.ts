@@ -21,7 +21,17 @@ export interface NotificationPayload {
  * Sets up Android notification channel, requests permissions,
  * and registers FCM device token with Supabase if on mobile.
  */
+let currentUserId: string | undefined = undefined;
+let cachedToken: string | null = null;
+
 export async function initNotifications(userId?: string) {
+  if (userId) {
+    currentUserId = userId;
+    if (cachedToken) {
+      await saveDeviceToken(userId, cachedToken, Capacitor.getPlatform());
+    }
+  }
+
   if (isInitialized) return;
   isInitialized = true;
 
@@ -52,14 +62,13 @@ export async function initNotifications(userId?: string) {
         console.log('[Notifications] Push permissions:', pushPerm);
 
         if (pushPerm.receive === 'granted') {
-        // Register with Google FCM / Apple APNs
-          await PushNotifications.register();
-
-          // On successful token registration, save to Supabase
+          // Listeners MUST be added before calling PushNotifications.register()
           PushNotifications.addListener('registration', async (token) => {
             console.log('[Notifications] Push token received:', token.value);
-            if (userId) {
-              await saveDeviceToken(userId, token.value, Capacitor.getPlatform());
+            cachedToken = token.value;
+            const targetUser = currentUserId || userId;
+            if (targetUser) {
+              await saveDeviceToken(targetUser, token.value, Capacitor.getPlatform());
             }
           });
 
@@ -87,6 +96,9 @@ export async function initNotifications(userId?: string) {
               window.location.href = link;
             }
           });
+
+          // Register with Google FCM / Apple APNs
+          await PushNotifications.register();
         }
       }
 
