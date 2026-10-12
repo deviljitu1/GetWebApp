@@ -357,6 +357,10 @@ export class CallManager {
     }
   }
 
+  public toggleSpeaker(enabled: boolean) {
+    if (this.remoteAudio) this.remoteAudio.volume = enabled ? 1 : 0;
+  }
+
   public cleanup() {
     stopRingTone();
     if (this.localStream) {

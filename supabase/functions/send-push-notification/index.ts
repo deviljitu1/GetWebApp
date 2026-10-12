@@ -26,9 +26,17 @@ const json = (body: unknown, status = 200) =>
   });
 
 const readKey = (keySetName: string, legacyName: string) => {
+  const directKey = Deno.env.get(legacyName);
+  if (directKey) return directKey;
   const keySet = Deno.env.get(keySetName);
-  if (keySet) return JSON.parse(keySet).default as string;
-  return Deno.env.get(legacyName);
+  if (!keySet) return undefined;
+  try {
+    const parsed = JSON.parse(keySet) as Record<string, string>;
+    return parsed[legacyName] || parsed.default;
+  } catch {
+    console.warn(`${keySetName} is not valid JSON`);
+    return undefined;
+  }
 };
 
 Deno.serve(async (req) => {

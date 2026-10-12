@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Phone, PhoneOff, PhoneIncoming, Mic, MicOff, Bell, User } from 'lucide-react';
+import { Phone, PhoneOff, PhoneIncoming, Mic, MicOff, Volume2, VolumeX, Bell, User } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface CallContextType {
@@ -28,6 +28,7 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [activeCallId, setActiveCallId] = useState<string | null>(null);
   const [otherPeer, setOtherPeer] = useState<{ id: string; name: string } | null>(null);
   const [isMuted, setIsMuted] = useState(false);
+  const [isSpeakerOn, setIsSpeakerOn] = useState(true);
   const [callDuration, setCallDuration] = useState(0);
 
   // Incoming Ring popup
@@ -96,6 +97,8 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const startAudioCall = async (targetUserId: string, targetUserName: string) => {
     if (!callManager) return;
+    setIsSpeakerOn(true);
+    setIsMuted(false);
     setOtherPeer({ id: targetUserId, name: targetUserName });
     const callId = await callManager.startCall(targetUserId, targetUserName);
     setActiveCallId(callId);
@@ -103,6 +106,8 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const handleAcceptCall = async () => {
     if (!callManager || !activeCallId || !otherPeer) return;
+    setIsSpeakerOn(true);
+    setIsMuted(false);
     await callManager.acceptCall(activeCallId, otherPeer.id);
   };
 
@@ -123,6 +128,13 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const nextMuted = !isMuted;
     setIsMuted(nextMuted);
     callManager.toggleMute(nextMuted);
+  };
+
+  const handleToggleSpeaker = () => {
+    if (!callManager) return;
+    const nextSpeakerOn = !isSpeakerOn;
+    setIsSpeakerOn(nextSpeakerOn);
+    callManager.toggleSpeaker(nextSpeakerOn);
   };
 
   /** Ring / Bell a team member */
@@ -265,6 +277,20 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({ children
                   title={isMuted ? 'Unmute' : 'Mute'}
                 >
                   {isMuted ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+                </Button>
+              )}
+              {callState === 'connected' && (
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleToggleSpeaker}
+                  className={`h-12 w-12 rounded-full border-2 transition-colors ${
+                    isSpeakerOn ? 'border-primary/40 bg-primary/10 text-primary' : 'border-border text-muted-foreground'
+                  }`}
+                  title={isSpeakerOn ? 'Speaker on' : 'Speaker off'}
+                  aria-label={isSpeakerOn ? 'Turn speaker off' : 'Turn speaker on'}
+                >
+                  {isSpeakerOn ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
                 </Button>
               )}
               <Button
