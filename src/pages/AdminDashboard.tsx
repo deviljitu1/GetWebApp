@@ -117,7 +117,7 @@ const AdminDashboard = () => {
         <div>
           <Seo title="Admin Dashboard — GetWebApp" description="Track team tasks, hours, clients, and approvals from the GetWebApp admin dashboard." path="/" noindex />
           <h1 className="sr-only">Admin Dashboard — team overview</h1>
-          <h2 className="text-3xl font-bold tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
             {getGreeting()}, <span className="text-primary">Admin</span>
           </h2>
           <p className="text-muted-foreground mt-1 flex items-center gap-2 text-xs sm:text-sm">
@@ -130,7 +130,7 @@ const AdminDashboard = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap sm:justify-end [&>*]:max-w-full">
+        <div className="flex items-center gap-2 flex-col sm:flex-row sm:justify-end [&>*]:w-full sm:[&>*]:w-auto [&>*]:max-w-full">
           <AdminPushBroadcastDialog />
           <AddTaskDialog />
           <Button onClick={downloadCSV} variant="outline" size="sm" className="gap-1.5 h-9">
@@ -141,7 +141,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard icon={Users} label="Active Team Members" value={activeMembers.length} />
         <StatCard icon={ClipboardList} label="Tasks Today" value={todayTasks.length} />
         <StatCard icon={CheckCircle} label="Completed Today" value={completedToday} />

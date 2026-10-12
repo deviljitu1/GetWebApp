@@ -62,7 +62,7 @@ const MemberDashboard = () => {
         <div>
           <Seo title="My Dashboard — GetWebApp" description="See your tasks for today, run timers, and review your logged hours in GetWebApp." path="/" noindex />
           <h1 className="sr-only">My Dashboard — daily tasks and time</h1>
-          <h2 className="text-3xl font-bold tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
             {getGreeting()}, <span className="text-primary">{user?.name.split(' ')[0]}</span>
           </h2>
           <p className="text-muted-foreground mt-1 flex items-center gap-2 text-xs sm:text-sm">
@@ -75,14 +75,14 @@ const MemberDashboard = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap sm:justify-end [&>*]:max-w-full">
+        <div className="flex items-center gap-2.5 flex-col sm:flex-row sm:justify-end [&>*]:w-full sm:[&>*]:w-auto [&>*]:max-w-full">
           <DailyStandupPrompt />
           <AddTaskDialog />
         </div>
       </div>
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard icon={ClipboardList} label="Tasks Today" value={todayTasks.length} />
         <StatCard icon={CheckCircle2} label="Completed" value={completedToday} />
         <StatCard icon={Clock} label="Time Today" value={formatDuration(totalTimeToday)} />
