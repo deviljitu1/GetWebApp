@@ -43,13 +43,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           // Don't log out yet, maybe just network blip? But we can't set user fully.
         }
 
-        const { data: roleData, error: roleError } = await supabase
+        const { data: roleRows, error: roleError } = await supabase
           .from('user_roles')
           .select('role')
-          .eq('user_id', session.user.id)
-          .maybeSingle();
+          .eq('user_id', session.user.id);
 
         if (roleError) console.error("Role fetch error:", roleError);
+
+        const hasAdminRole = roleRows?.some(r => r.role === 'admin');
+        const userRole: AppRole = hasAdminRole ? 'admin' : (roleRows?.[0]?.role as AppRole) || 'employee';
 
         if (profile) {
           if (!profile.is_active) {
@@ -66,7 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             email: session.user.email || '',
             memberType: (profile.employee_type as MemberType) || 'Other',
             isActive: profile.is_active,
-            role: (roleData?.role as AppRole) || 'employee',
+            role: userRole,
           });
         } else {
           // Profile missing - unexpected state for logged in user if seed ran?

@@ -211,10 +211,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (data) roles = data as { user_id: string; role: AppRole }[];
       }
 
-      const withRoles: ProfileWithRole[] = (profiles || []).map(p => ({
-        ...p,
-        role: (roles.find(r => r.user_id === p.user_id)?.role as AppRole) || 'employee',
-      }));
+      const withRoles: ProfileWithRole[] = (profiles || []).map(p => {
+        const userRoles = roles.filter(r => r.user_id === p.user_id);
+        const isAdmin = userRoles.some(r => r.role === 'admin');
+        return {
+          ...p,
+          role: (isAdmin ? 'admin' : (userRoles[0]?.role as AppRole) || 'employee'),
+        };
+      });
 
       setMembers(withRoles);
       localStorage.setItem('worktracker_cached_members_v1', JSON.stringify(withRoles));
