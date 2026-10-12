@@ -13,8 +13,8 @@ const StatCard = ({ icon: Icon, label, value }: StatCardProps) => (
       <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
     </div>
     <div className="min-w-0">
-      <p className="text-sm font-medium text-muted-foreground break-words leading-tight">{label}</p>
-      <p className="text-2xl font-bold tracking-tight text-foreground break-words leading-tight">{value}</p>
+      <p className="text-xs sm:text-sm font-medium text-muted-foreground break-words leading-tight">{label}</p>
+      <p className="text-xl sm:text-2xl font-bold tracking-tight text-foreground break-words leading-tight">{value}</p>
     </div>
   </Card>
 );

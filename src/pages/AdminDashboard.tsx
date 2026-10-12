@@ -117,10 +117,10 @@ const AdminDashboard = () => {
         <div>
           <Seo title="Admin Dashboard — GetWebApp" description="Track team tasks, hours, clients, and approvals from the GetWebApp admin dashboard." path="/" noindex />
           <h1 className="sr-only">Admin Dashboard — team overview</h1>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+          <h2 className="text-xl sm:text-3xl font-bold tracking-tight">
             {getGreeting()}, <span className="text-primary">Admin</span>
           </h2>
-          <p className="text-muted-foreground mt-1 flex items-center gap-2 text-xs sm:text-sm">
+          <p className="text-muted-foreground mt-1 flex items-center gap-2 text-[11px] sm:text-sm">
             <Clock className="h-4 w-4" />
             <span>
               {time.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
