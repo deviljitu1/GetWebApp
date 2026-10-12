@@ -970,3 +970,23 @@ USING (
 -- Ensure storage buckets exist
 INSERT INTO storage.buckets (id, name, public) VALUES ('task-attachments', 'task-attachments', false) ON CONFLICT (id) DO NOTHING;
 INSERT INTO storage.buckets (id, name, public) VALUES ('chat-attachments', 'chat-attachments', true) ON CONFLICT (id) DO NOTHING;
+
+-- Mobile push device tokens
+CREATE TABLE public.user_device_tokens (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  token TEXT NOT NULL UNIQUE,
+  platform TEXT NOT NULL CHECK (platform IN ('android', 'ios', 'web')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX user_device_tokens_user_id_idx ON public.user_device_tokens(user_id);
+ALTER TABLE public.user_device_tokens ENABLE ROW LEVEL SECURITY;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.user_device_tokens TO authenticated;
+GRANT ALL ON public.user_device_tokens TO service_role;
+CREATE POLICY "Users manage own device tokens" ON public.user_device_tokens
+  FOR ALL TO authenticated
+  USING ((SELECT auth.uid()) = user_id)
+  WITH CHECK ((SELECT auth.uid()) = user_id);
+CREATE TRIGGER user_device_tokens_updated_at BEFORE UPDATE ON public.user_device_tokens
+  FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();

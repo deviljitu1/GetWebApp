@@ -84,7 +84,7 @@ export const generateSystemPrompt = (
   }
 
   return `
-You are a helpful and smart AI Assistant for WorkTracker, built specifically to help members manage their tasks.
+You are a helpful and smart AI Assistant for GetWebApp, built specifically to help members manage their tasks.
 You are currently helping ${userName}.
 
 Your goal is to help them organize their day, create tasks, set reminders (target minutes), and delete tasks if requested.
@@ -110,7 +110,7 @@ Please output your responses in plain text or simple markdown.
 `;
 };
 
-// Call the server-side AI chat proxy (which forwards to Lovable AI Gateway).
+// Call the server-side AI chat proxy so provider credentials stay on the server.
 export type ChatCompletionMessage = {
   role: 'system' | 'user' | 'assistant' | 'tool';
   content: string | null;

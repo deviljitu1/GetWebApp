@@ -1,11 +1,11 @@
-// AI chat proxy — forwards chat completion requests to the Lovable AI Gateway
+// AI chat proxy — forwards chat completion requests to an OpenAI-compatible provider
 // so the model key never leaves the server. Requires an authenticated Supabase session.
 
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
-const GATEWAY_URL = 'https://ai.gateway.lovable.dev/v1/chat/completions';
-const DEFAULT_MODEL = 'google/gemini-2.5-flash';
+const GATEWAY_URL = Deno.env.get('AI_API_URL');
+const DEFAULT_MODEL = Deno.env.get('AI_MODEL');
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -34,8 +34,8 @@ Deno.serve(async (req) => {
       );
     }
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
+    const aiApiKey = Deno.env.get('AI_API_KEY');
+    if (!GATEWAY_URL || !DEFAULT_MODEL || !aiApiKey) {
       return new Response(
         JSON.stringify({ error: 'AI not configured' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
@@ -61,7 +61,7 @@ Deno.serve(async (req) => {
     const resp = await fetch(GATEWAY_URL, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        Authorization: `Bearer ${aiApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),

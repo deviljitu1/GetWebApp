@@ -60,7 +60,7 @@ const MemberDashboard = () => {
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <Seo title="My Dashboard — WorkTracker" description="See your tasks for today, run timers, and review your logged hours in WorkTracker." path="/" noindex />
+          <Seo title="My Dashboard — GetWebApp" description="See your tasks for today, run timers, and review your logged hours in GetWebApp." path="/" noindex />
           <h1 className="sr-only">My Dashboard — daily tasks and time</h1>
           <h2 className="text-3xl font-bold tracking-tight">
             {getGreeting()}, <span className="text-primary">{user?.name.split(' ')[0]}</span>

@@ -4,7 +4,8 @@ import { PushNotifications } from '@capacitor/push-notifications';
 import { supabase } from '@/integrations/supabase/client';
 import { playNotificationSound } from '@/lib/notifications';
 
-const CHANNEL_ID = 'worktracker_alerts';
+const CHANNEL_ID = 'getwebapp_alerts';
+const REMOTE_PUSH_ENABLED = import.meta.env.VITE_ENABLE_PUSH_NOTIFICATIONS === 'true';
 let isInitialized = false;
 
 export interface NotificationPayload {
@@ -31,11 +32,10 @@ export async function initNotifications(userId?: string) {
       // 1. Create Android Notification Channel
       await LocalNotifications.createChannel({
         id: CHANNEL_ID,
-        name: 'WorkTracker Alerts',
+        name: 'GetWebApp Alerts',
         description: 'Urgent task updates, timer reminders, and team messages',
         importance: 5, // High importance (banners + heads-up)
         visibility: 1, // Public on lockscreen
-        sound: 'beep.wav',
         vibration: true,
         lights: true,
         lightColor: '#2563EB',
@@ -45,46 +45,49 @@ export async function initNotifications(userId?: string) {
       const localPerm = await LocalNotifications.requestPermissions();
       console.log('[Notifications] Local permissions:', localPerm);
 
-      // 3. Request Push Notification permissions
-      const pushPerm = await PushNotifications.requestPermissions();
-      console.log('[Notifications] Push permissions:', pushPerm);
+      // 3. Register for remote push only after Firebase has been configured.
+      // Calling FirebaseMessaging without google-services.json can crash Android.
+      if (REMOTE_PUSH_ENABLED) {
+        const pushPerm = await PushNotifications.requestPermissions();
+        console.log('[Notifications] Push permissions:', pushPerm);
 
-      if (pushPerm.receive === 'granted') {
+        if (pushPerm.receive === 'granted') {
         // Register with Google FCM / Apple APNs
-        await PushNotifications.register();
+          await PushNotifications.register();
 
-        // On successful token registration, save to Supabase
-        PushNotifications.addListener('registration', async (token) => {
-          console.log('[Notifications] Push token received:', token.value);
-          if (userId) {
-            await saveDeviceToken(userId, token.value, Capacitor.getPlatform());
-          }
-        });
-
-        PushNotifications.addListener('registrationError', (err) => {
-          console.warn('[Notifications] Push registration error:', err);
-        });
-
-        // Listen for foreground push notifications
-        PushNotifications.addListener('pushNotificationReceived', (notification) => {
-          console.log('[Notifications] Push received in foreground:', notification);
-          playNotificationSound();
-          // Display as a local banner so the user sees it
-          showNativeNotification({
-            title: notification.title || 'WorkTracker Alert',
-            body: notification.body || '',
-            data: notification.data,
+          // On successful token registration, save to Supabase
+          PushNotifications.addListener('registration', async (token) => {
+            console.log('[Notifications] Push token received:', token.value);
+            if (userId) {
+              await saveDeviceToken(userId, token.value, Capacitor.getPlatform());
+            }
           });
-        });
 
-        // Handle user clicking on a push notification
-        PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
-          console.log('[Notifications] Push notification tapped:', action);
-          const link = action.notification.data?.link_url;
-          if (link && typeof window !== 'undefined') {
-            window.location.href = link;
-          }
-        });
+          PushNotifications.addListener('registrationError', (err) => {
+            console.warn('[Notifications] Push registration error:', err);
+          });
+
+          // Listen for foreground push notifications
+          PushNotifications.addListener('pushNotificationReceived', (notification) => {
+            console.log('[Notifications] Push received in foreground:', notification);
+            playNotificationSound();
+            // Display as a local banner so the user sees it
+            showNativeNotification({
+              title: notification.title || 'GetWebApp Alert',
+              body: notification.body || '',
+              data: notification.data,
+            });
+          });
+
+          // Handle user clicking on a push notification
+          PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
+            console.log('[Notifications] Push notification tapped:', action);
+            const link = action.notification.data?.link_url;
+            if (link && typeof window !== 'undefined') {
+              window.location.href = link;
+            }
+          });
+        }
       }
 
       // Handle user clicking on local notifications
@@ -121,15 +124,16 @@ export async function initNotifications(userId?: string) {
  */
 export async function saveDeviceToken(userId: string, token: string, platform = 'android') {
   try {
-    await supabase.from('user_device_tokens' as any).upsert(
+    const { error } = await supabase.from('user_device_tokens').upsert(
       {
         user_id: userId,
         token: token,
         platform: platform,
         updated_at: new Date().toISOString(),
       },
-      { onConflict: 'user_id,token' }
+      { onConflict: 'token' }
     );
+    if (error) throw error;
     console.log('[Notifications] Device token saved to Supabase');
   } catch (err) {
     console.error('[Notifications] Error saving device token:', err);

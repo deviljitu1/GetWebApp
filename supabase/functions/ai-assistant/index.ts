@@ -5,8 +5,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const LOVABLE_AI_URL = 'https://ai.gateway.lovable.dev/v1/chat/completions'
-const MODEL = 'google/gemini-2.5-flash'
+const AI_API_URL = Deno.env.get('AI_API_URL')
+const MODEL = Deno.env.get('AI_MODEL')
 
 type ChatMessage = {
   role: 'system' | 'user' | 'assistant' | 'tool'
@@ -276,8 +276,8 @@ RULES:
       ...messages,
     ]
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY')
-    if (!LOVABLE_API_KEY) {
+    const aiApiKey = Deno.env.get('AI_API_KEY')
+    if (!AI_API_URL || !MODEL || !aiApiKey) {
       return new Response(JSON.stringify({ error: 'AI not configured' }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -286,10 +286,10 @@ RULES:
 
     // Tool-call loop (max 6 iterations)
     for (let i = 0; i < 6; i++) {
-      const aiRes = await fetch(LOVABLE_AI_URL, {
+      const aiRes = await fetch(AI_API_URL, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+          'Authorization': `Bearer ${aiApiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -307,7 +307,7 @@ RULES:
         })
       }
       if (aiRes.status === 402) {
-        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in workspace settings.' }), {
+        return new Response(JSON.stringify({ error: 'AI provider credits are exhausted.' }), {
           status: 402,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         })

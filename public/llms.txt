@@ -1,10 +1,10 @@
-# WorkTracker
+# GetWebApp
 
-> WorkTracker is a team work and time tracking app: daily tasks, live timers, clients and projects, approvals, and shareable work reports.
+> GetWebApp is a team work and time tracking app: daily tasks, live timers, clients and projects, approvals, and shareable work reports.
 
-WorkTracker is used by small teams and agencies to log what was worked on each day, how long it took, for which client or project, and to review or approve completed work. Most of the app requires a signed-in account.
+GetWebApp is used by small teams and agencies to log what was worked on each day, how long it took, for which client or project, and to review or approve completed work. Most of the app requires a signed-in account.
 
 ## Pages
 
 - [Home](/): Product overview and sign-in entry point.
-- [Sign in](/login): Sign in to your WorkTracker workspace.
+- [Sign in](/login): Sign in to your GetWebApp workspace.

@@ -192,7 +192,7 @@ const TeamStatus = () => {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500 pb-10">
-            <Seo title="Team Status — WorkTracker" description="Real-time view of who is working, what they are working on, and today's team activity." path="/team-status" noindex />
+            <Seo title="Team Status — GetWebApp" description="Real-time view of who is working, what they are working on, and today's team activity." path="/team-status" noindex />
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Team <span className="text-primary">Status</span></h1>

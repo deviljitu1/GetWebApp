@@ -375,7 +375,7 @@ const Chat = () => {
 
     return (
         <div className="flex h-[calc(100vh-8rem)] gap-6 animate-in fade-in duration-500">
-            <Seo title="Team Communication — WorkTracker" description="Message teammates, share files, and keep project conversations in one place inside WorkTracker." path="/chat" noindex />
+            <Seo title="Team Communication — GetWebApp" description="Message teammates, share files, and keep project conversations in one place inside GetWebApp." path="/chat" noindex />
             <h1 className="sr-only">Team Communication</h1>
             {/* Sidebar: Chat List */}
             <div className={cn(

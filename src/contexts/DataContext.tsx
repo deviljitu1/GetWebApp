@@ -263,7 +263,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const notif = payload.new as any;
             if (notif) {
               showNativeNotification({
-                title: notif.title || 'New WorkTracker Alert',
+                title: notif.title || 'New GetWebApp Alert',
                 body: notif.body || '',
                 data: { link_url: notif.link_url },
               });

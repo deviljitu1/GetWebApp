@@ -31,7 +31,7 @@ const NotificationSettings = () => {
 
   const handleTestNotification = async () => {
     const sent = await showNativeNotification({
-      title: 'WorkTracker Alert 🔔',
+      title: 'GetWebApp Alert 🔔',
       body: 'Push & Mobile notifications are working successfully on this device!',
       data: { link_url: '/' },
     });

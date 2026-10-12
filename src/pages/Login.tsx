@@ -61,7 +61,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex w-full">
-      <Seo title="Sign in — WorkTracker" description="Sign in to WorkTracker to log daily tasks, run time timers, and review your team's work." path="/login" />
+      <Seo title="Sign in — GetWebApp" description="Sign in to GetWebApp to log daily tasks, run time timers, and review your team's work." path="/login" />
       {/* Left branding panel with animated gradient */}
       <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden bg-primary/5">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-primary/5 animate-gradient-xy" />
@@ -79,7 +79,7 @@ const Login = () => {
             <span className="text-primary">Track Time.</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-lg leading-relaxed">
-            Elevate your productivity with WorkTracker. effortless time management for modern teams.
+            Elevate your productivity with GetWebApp. Effortless time management for modern teams.
           </p>
         </div>
 

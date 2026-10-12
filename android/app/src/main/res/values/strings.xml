@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">getweb-task</string>
-    <string name="title_activity_main">getweb-task</string>
-    <string name="package_name">app.lovable.cbb0c3de2055429c926e25a175144ae5</string>
-    <string name="custom_url_scheme">app.lovable.cbb0c3de2055429c926e25a175144ae5</string>
+    <string name="app_name">GetWebApp</string>
+    <string name="title_activity_main">GetWebApp</string>
+    <string name="package_name">com.dailyflow.app</string>
+    <string name="custom_url_scheme">com.dailyflow.app</string>
 </resources>

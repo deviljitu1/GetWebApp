@@ -6,3 +6,6 @@ verify_jwt = false
 [functions.client-report]
 verify_jwt = false
 
+[functions.send-push-notification]
+verify_jwt = true
+

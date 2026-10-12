@@ -37,7 +37,7 @@ const Layout = () => {
           <div className="p-2 bg-primary/10 rounded-lg">
             <Clock className="h-6 w-6 text-primary" />
           </div>
-          <span className="text-xl font-bold tracking-tight text-sidebar-foreground">WorkTracker</span>
+          <span className="text-xl font-bold tracking-tight text-sidebar-foreground">GetWebApp</span>
         </div>
       </div>
 
@@ -99,7 +99,7 @@ const Layout = () => {
   );
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-background">
+    <div className="flex h-dvh min-h-0 w-full overflow-hidden bg-background">
       {/* Desktop sidebar */}
       <aside className="hidden md:flex w-72 flex-col shrink-0 z-20">
         <SidebarContent />
@@ -108,7 +108,7 @@ const Layout = () => {
       {/* Mobile overlay */}
       {mobileOpen && (
         <div className="fixed inset-0 z-50 md:hidden bg-background/80 backdrop-blur-sm animate-in fade-in">
-          <div className="fixed inset-y-0 left-0 w-72 h-full shadow-2xl animate-in slide-in-from-left duration-300">
+          <div className="fixed inset-y-0 left-0 w-[min(18rem,calc(100vw-3rem))] h-full shadow-2xl animate-in slide-in-from-left duration-300">
             <SidebarContent />
             <Button
               variant="ghost"
@@ -125,12 +125,12 @@ const Layout = () => {
       <div className="flex-1 flex flex-col overflow-hidden relative">
         <OfflineBanner />
         {/* Mobile header */}
-        <header className="md:hidden flex items-center justify-between px-4 py-3 border-b bg-card/80 backdrop-blur-md sticky top-0 z-10">
+        <header className="md:hidden flex items-center justify-between px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] border-b bg-card/80 backdrop-blur-md sticky top-0 z-10">
           <div className="flex items-center gap-3">
             <div className="p-1.5 bg-primary/10 rounded-lg">
               <Clock className="h-5 w-5 text-primary" />
             </div>
-            <span className="font-bold">WorkTracker</span>
+            <span className="font-bold">GetWebApp</span>
           </div>
           <div className="flex items-center gap-1">
             <NotificationSettings />
@@ -148,7 +148,7 @@ const Layout = () => {
           </div>
           {/* Subtle background pattern for main content */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
-          <div className="relative p-6 md:p-8 max-w-7xl mx-auto w-full">
+          <div className="relative px-3 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-4 sm:pt-6 md:p-8 max-w-7xl mx-auto w-full min-w-0">
             <Outlet />
           </div>
         </main>

@@ -147,7 +147,7 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({ children
       user_id: targetUserId,
       kind: 'ring',
       title: `🔔 Ring from ${user.name}`,
-      body: `${user.name} is ringing / buzzing you! Please check in on WorkTracker.`,
+      body: `${user.name} is ringing / buzzing you! Please check in on GetWebApp.`,
       link_url: '/',
     });
 

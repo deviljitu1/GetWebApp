@@ -216,7 +216,7 @@ export class CallManager {
       user_id: recipientId,
       kind: 'call',
       title: `📞 Incoming Call from ${this.currentUserName}`,
-      body: `${this.currentUserName} is calling you on WorkTracker. Click to answer!`,
+      body: `${this.currentUserName} is calling you on GetWebApp. Click to answer!`,
       link_url: '/',
     });
 

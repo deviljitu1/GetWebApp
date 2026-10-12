@@ -1,4 +1,4 @@
-package app.lovable.cbb0c3de2055429c926e25a175144ae5;
+package com.dailyflow.app;
 
 import com.getcapacitor.BridgeActivity;
 

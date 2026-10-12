@@ -14,7 +14,6 @@ import Members from "@/pages/Members";
 import TeamStatus from "@/pages/TeamStatus";
 import Chat from "@/pages/Chat";
 import NotFound from "@/pages/NotFound";
-import OAuthConsent from "@/pages/OAuthConsent";
 
 const queryClient = new QueryClient();
 
@@ -29,7 +28,6 @@ const App = () => (
             <BrowserRouter>
               <Routes>
                 <Route path="/login" element={<Login />} />
-                <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
                 <Route element={<ProtectedRoute />}>
                   <Route element={<Layout />}>
                     <Route path="/" element={<Dashboard />} />

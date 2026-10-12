@@ -115,7 +115,7 @@ const AdminDashboard = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <Seo title="Admin Dashboard — WorkTracker" description="Track team tasks, hours, clients, and approvals from the WorkTracker admin dashboard." path="/" noindex />
+          <Seo title="Admin Dashboard — GetWebApp" description="Track team tasks, hours, clients, and approvals from the GetWebApp admin dashboard." path="/" noindex />
           <h1 className="sr-only">Admin Dashboard — team overview</h1>
           <h2 className="text-3xl font-bold tracking-tight">
             {getGreeting()}, <span className="text-primary">Admin</span>

@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Send, BellRing, Users, Sparkles } from 'lucide-react';
+import { Send, BellRing, Users } from 'lucide-react';
 
 export const AdminPushBroadcastDialog: React.FC<{ trigger?: React.ReactNode }> = ({ trigger }) => {
   const { user } = useAuth();
@@ -53,23 +53,22 @@ export const AdminPushBroadcastDialog: React.FC<{ trigger?: React.ReactNode }> =
         recipientIds = [targetUser];
       }
 
-      const rows = recipientIds.map((userId) => ({
-        user_id: userId,
-        kind: 'broadcast',
-        title: title.trim(),
-        body: body.trim(),
-        link_url: linkUrl.trim() || null,
-        is_read: false,
-      }));
-
-      const { error } = await supabase.from('notifications').insert(rows);
+      const { data, error } = await supabase.functions.invoke('send-push-notification', {
+        body: {
+          recipientIds,
+          title: title.trim(),
+          body: body.trim(),
+          linkUrl: linkUrl.trim() || null,
+        },
+      });
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
 
       toast({
-        title: 'Push Notification Sent! 🚀',
-        description: `Delivered to ${
-          targetUser === 'all' ? `all ${recipientIds.length} team members` : 'selected employee'
-        }.`,
+        title: data?.delivered ? 'Push Notification Sent! 🚀' : 'In-app Notification Sent',
+        description: data?.warning
+          ? `${recipientIds.length} in-app notification${recipientIds.length === 1 ? '' : 's'} created. ${data.warning}.`
+          : `${data?.delivered ?? 0} device push${data?.delivered === 1 ? '' : 'es'} delivered; ${recipientIds.length} in-app notification${recipientIds.length === 1 ? '' : 's'} created.`,
       });
 
       setTitle('');
@@ -101,7 +100,7 @@ export const AdminPushBroadcastDialog: React.FC<{ trigger?: React.ReactNode }> =
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="w-[calc(100vw-2rem)] max-h-[90dvh] overflow-y-auto sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
             <div className="p-2 bg-primary/10 rounded-lg">
@@ -172,11 +171,11 @@ export const AdminPushBroadcastDialog: React.FC<{ trigger?: React.ReactNode }> =
             />
           </div>
 
-          <DialogFooter className="mt-4 gap-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+          <DialogFooter className="mt-4 gap-2 sm:gap-2">
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="w-full sm:w-auto">
               Cancel
             </Button>
-            <Button type="submit" disabled={loading} className="gap-2">
+            <Button type="submit" disabled={loading} className="w-full gap-2 sm:w-auto">
               <Send className="h-4 w-4" />
               {loading ? 'Sending...' : 'Send Push Alert'}
             </Button>
