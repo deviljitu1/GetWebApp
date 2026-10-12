@@ -15,7 +15,7 @@ import {
   Kanban,
   Calendar,
   Moon,
-  DollarSign,
+  IndianRupee,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -197,7 +197,7 @@ const AdminDashboard = () => {
             onClick={() => setActiveView('profitability')}
             className="h-8 text-xs font-semibold gap-1.5 px-3"
           >
-            <DollarSign className="h-4 w-4 text-emerald-500" />
+            <IndianRupee className="h-4 w-4 text-emerald-500" />
             <span>Profitability & Dashboard</span>
           </Button>
         </div>
