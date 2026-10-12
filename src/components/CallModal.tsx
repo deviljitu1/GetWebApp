@@ -175,7 +175,7 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       {/* Incoming Ring Modal */}
       <Dialog open={!!incomingRing} onOpenChange={() => setIncomingRing(null)}>
-        <DialogContent className="sm:max-w-md text-center p-6 bg-card border-amber-500/30">
+        <DialogContent className="w-[calc(100vw-2rem)] max-h-[90dvh] overflow-y-auto sm:max-w-md text-center p-4 sm:p-6 bg-card border-amber-500/30">
           <DialogHeader>
             <div className="mx-auto bg-amber-500/10 p-4 rounded-full w-16 h-16 flex items-center justify-center animate-bounce mb-2">
               <Bell className="h-8 w-8 text-amber-500" />
@@ -211,10 +211,10 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       {/* Active Call / Incoming Call Dialog */}
       <Dialog open={callState !== 'idle'} onOpenChange={() => {}}>
-        <DialogContent className="sm:max-w-sm text-center p-6 bg-card border-border shadow-2xl rounded-2xl">
+        <DialogContent className="w-[calc(100vw-2rem)] max-h-[90dvh] overflow-y-auto sm:max-w-sm text-center p-4 sm:p-6 bg-card border-border shadow-2xl rounded-2xl">
           <DialogHeader className="items-center">
             <div className="relative mb-4 mt-2">
-              <Avatar className="h-24 w-24 border-4 border-primary/20 shadow-xl">
+              <Avatar className="h-20 w-20 sm:h-24 sm:w-24 border-4 border-primary/20 shadow-xl">
                 <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${otherPeer?.name}`} />
                 <AvatarFallback className="bg-primary/10 text-2xl font-bold text-primary">
                   {otherPeer?.name?.charAt(0) || <User />}
@@ -225,7 +225,7 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({ children
               )}
             </div>
 
-            <DialogTitle className="text-2xl font-bold">
+            <DialogTitle className="text-xl sm:text-2xl font-bold break-words">
               {otherPeer?.name || 'Teammate'}
             </DialogTitle>
             <DialogDescription className="text-sm font-medium text-muted-foreground">
