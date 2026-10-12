@@ -130,7 +130,7 @@ const AdminDashboard = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap sm:justify-end [&>*]:max-w-full">
           <AdminPushBroadcastDialog />
           <AddTaskDialog />
           <Button onClick={downloadCSV} variant="outline" size="sm" className="gap-1.5 h-9">
@@ -149,13 +149,13 @@ const AdminDashboard = () => {
       </div>
 
       {/* View Switcher Bar */}
-      <div className="flex items-center justify-between gap-2 bg-card p-1.5 rounded-xl border shadow-xs overflow-x-auto">
-        <div className="flex items-center gap-1 shrink-0">
+      <div className="flex items-center gap-2 bg-card p-1.5 rounded-xl border shadow-xs overflow-x-auto overscroll-x-contain">
+        <div className="flex items-center gap-1 shrink-0 min-w-max">
           <Button
             variant={activeView === 'list' ? 'secondary' : 'ghost'}
             size="sm"
             onClick={() => setActiveView('list')}
-            className="h-8 text-xs font-semibold gap-1.5 px-3"
+            className="h-8 text-xs font-semibold gap-1.5 px-2 sm:px-3"
           >
             <LayoutList className="h-4 w-4" />
             <span>List View</span>
@@ -165,7 +165,7 @@ const AdminDashboard = () => {
             variant={activeView === 'kanban' ? 'secondary' : 'ghost'}
             size="sm"
             onClick={() => setActiveView('kanban')}
-            className="h-8 text-xs font-semibold gap-1.5 px-3"
+            className="h-8 text-xs font-semibold gap-1.5 px-2 sm:px-3"
           >
             <Kanban className="h-4 w-4" />
             <span>Kanban Board</span>
@@ -175,7 +175,7 @@ const AdminDashboard = () => {
             variant={activeView === 'calendar' ? 'secondary' : 'ghost'}
             size="sm"
             onClick={() => setActiveView('calendar')}
-            className="h-8 text-xs font-semibold gap-1.5 px-3"
+            className="h-8 text-xs font-semibold gap-1.5 px-2 sm:px-3"
           >
             <Calendar className="h-4 w-4" />
             <span>Calendar & Deadlines</span>
@@ -185,7 +185,7 @@ const AdminDashboard = () => {
             variant={activeView === 'standup' ? 'secondary' : 'ghost'}
             size="sm"
             onClick={() => setActiveView('standup')}
-            className="h-8 text-xs font-semibold gap-1.5 px-3"
+            className="h-8 text-xs font-semibold gap-1.5 px-2 sm:px-3"
           >
             <Moon className="h-4 w-4 text-amber-500" />
             <span>Daily Standups</span>
@@ -195,7 +195,7 @@ const AdminDashboard = () => {
             variant={activeView === 'profitability' ? 'secondary' : 'ghost'}
             size="sm"
             onClick={() => setActiveView('profitability')}
-            className="h-8 text-xs font-semibold gap-1.5 px-3"
+            className="h-8 text-xs font-semibold gap-1.5 px-2 sm:px-3"
           >
             <IndianRupee className="h-4 w-4 text-emerald-500" />
             <span>Profitability & Dashboard</span>
@@ -218,7 +218,7 @@ const AdminDashboard = () => {
             <DashboardCharts tasks={filteredTasks} />
           </div>
 
-          <div className="glass-card rounded-xl p-6 border-none space-y-6">
+          <div className="glass-card rounded-xl p-4 sm:p-6 border-none space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold tracking-tight">Filters</h2>
             </div>

@@ -148,7 +148,7 @@ const Layout = () => {
           </div>
           {/* Subtle background pattern for main content */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
-          <div className="relative px-3 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-4 sm:pt-6 md:p-8 max-w-7xl mx-auto w-full min-w-0">
+          <div className="relative px-3 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-4 sm:pt-6 md:p-8 max-w-7xl mx-auto w-full min-w-0 overflow-x-hidden">
             <Outlet />
           </div>
         </main>

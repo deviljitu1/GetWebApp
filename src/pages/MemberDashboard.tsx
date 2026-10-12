@@ -57,7 +57,7 @@ const MemberDashboard = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <Seo title="My Dashboard — GetWebApp" description="See your tasks for today, run timers, and review your logged hours in GetWebApp." path="/" noindex />
@@ -75,7 +75,7 @@ const MemberDashboard = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
+        <div className="flex items-center gap-2.5 flex-wrap sm:justify-end [&>*]:max-w-full">
           <DailyStandupPrompt />
           <AddTaskDialog />
         </div>
@@ -90,13 +90,13 @@ const MemberDashboard = () => {
       </div>
 
       {/* View Switcher Bar */}
-      <div className="flex items-center justify-between gap-3 bg-card p-1.5 rounded-xl border shadow-xs">
-        <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2 bg-card p-1.5 rounded-xl border shadow-xs overflow-x-auto overscroll-x-contain">
+        <div className="flex items-center gap-1 shrink-0 min-w-max">
           <Button
             variant={activeView === 'list' ? 'secondary' : 'ghost'}
             size="sm"
             onClick={() => setActiveView('list')}
-            className="h-8 text-xs font-semibold gap-1.5 px-3"
+            className="h-8 text-xs font-semibold gap-1.5 px-2 sm:px-3"
           >
             <LayoutList className="h-4 w-4" />
             <span>List View</span>
@@ -106,7 +106,7 @@ const MemberDashboard = () => {
             variant={activeView === 'kanban' ? 'secondary' : 'ghost'}
             size="sm"
             onClick={() => setActiveView('kanban')}
-            className="h-8 text-xs font-semibold gap-1.5 px-3"
+            className="h-8 text-xs font-semibold gap-1.5 px-2 sm:px-3"
           >
             <Kanban className="h-4 w-4" />
             <span>Kanban Board</span>
@@ -116,7 +116,7 @@ const MemberDashboard = () => {
             variant={activeView === 'calendar' ? 'secondary' : 'ghost'}
             size="sm"
             onClick={() => setActiveView('calendar')}
-            className="h-8 text-xs font-semibold gap-1.5 px-3"
+            className="h-8 text-xs font-semibold gap-1.5 px-2 sm:px-3"
           >
             <Calendar className="h-4 w-4" />
             <span>Calendar & Deadlines</span>
@@ -135,13 +135,13 @@ const MemberDashboard = () => {
             <DashboardCharts tasks={memberTasks} />
           </div>
 
-          <div className="glass-card rounded-xl p-6 border-none">
+          <div className="glass-card rounded-xl p-4 sm:p-6 border-none min-w-0">
             <Tabs defaultValue="today" className="space-y-6">
-              <TabsList className="bg-muted/50 p-1 rounded-lg">
-                <TabsTrigger value="today" className="rounded-md data-[state=active]:bg-background data-[state=active]:shadow-sm">Today ({todayTasks.length})</TabsTrigger>
-                <TabsTrigger value="ongoing" className="rounded-md data-[state=active]:bg-background data-[state=active]:shadow-sm">Ongoing ({ongoingTasks.length})</TabsTrigger>
-                <TabsTrigger value="completed" className="rounded-md data-[state=active]:bg-background data-[state=active]:shadow-sm">Completed ({completedTasks.length})</TabsTrigger>
-                <TabsTrigger value="all" className="rounded-md data-[state=active]:bg-background data-[state=active]:shadow-sm">All Tasks ({memberTasks.length})</TabsTrigger>
+              <TabsList className="w-full justify-start overflow-x-auto overscroll-x-contain bg-muted/50 p-1 rounded-lg">
+                <TabsTrigger value="today" className="shrink-0 rounded-md data-[state=active]:bg-background data-[state=active]:shadow-sm">Today ({todayTasks.length})</TabsTrigger>
+                <TabsTrigger value="ongoing" className="shrink-0 rounded-md data-[state=active]:bg-background data-[state=active]:shadow-sm">Ongoing ({ongoingTasks.length})</TabsTrigger>
+                <TabsTrigger value="completed" className="shrink-0 rounded-md data-[state=active]:bg-background data-[state=active]:shadow-sm">Completed ({completedTasks.length})</TabsTrigger>
+                <TabsTrigger value="all" className="shrink-0 rounded-md data-[state=active]:bg-background data-[state=active]:shadow-sm">All Tasks ({memberTasks.length})</TabsTrigger>
               </TabsList>
 
               <TabsContent value="today" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
