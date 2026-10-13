@@ -188,7 +188,7 @@ export const AIAssistantWidget = () => {
     return (
       <Button 
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-2xl shadow-primary/40 hover:scale-105 transition-all z-50 bg-primary"
+        className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-4 sm:bottom-6 sm:right-6 h-14 w-14 rounded-full shadow-2xl shadow-primary/40 hover:scale-105 transition-all z-50 bg-primary"
       >
         <Bot className="h-6 w-6 text-primary-foreground" />
       </Button>
@@ -197,8 +197,8 @@ export const AIAssistantWidget = () => {
 
   return (
     <div className={cn(
-      "fixed bottom-6 right-6 bg-background border border-border/50 shadow-2xl rounded-2xl flex flex-col z-50 overflow-hidden transition-all duration-300",
-      isExpanded ? "w-[400px] h-[600px] sm:w-[500px] sm:h-[700px]" : "w-[350px] h-[500px]"
+      "fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-4 sm:bottom-6 sm:right-6 bg-background border border-border/50 shadow-2xl rounded-2xl flex flex-col z-50 overflow-hidden transition-all duration-300",
+      isExpanded ? "w-[calc(100vw-2rem)] h-[min(600px,calc(100dvh-11rem))] sm:w-[500px] sm:h-[700px]" : "w-[calc(100vw-2rem)] h-[min(500px,calc(100dvh-11rem))] sm:w-[350px] sm:h-[500px]"
     )}>
       <div className="p-4 bg-primary/5 border-b border-border/50 flex items-center justify-between">
         <div className="flex items-center gap-2">

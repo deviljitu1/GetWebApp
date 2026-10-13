@@ -98,7 +98,7 @@ const LunaAssistant = () => {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-6 right-6 z-40 h-14 w-14 rounded-full bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 text-white shadow-xl hover:scale-110 transition-transform flex items-center justify-center group"
+          className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] left-4 sm:bottom-6 sm:left-auto sm:right-24 z-40 h-14 w-14 rounded-full bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 text-white shadow-xl hover:scale-110 transition-transform flex items-center justify-center group"
           aria-label="Open Luna AI"
         >
           <Sparkles className="h-6 w-6 group-hover:rotate-12 transition-transform" />
@@ -108,7 +108,7 @@ const LunaAssistant = () => {
 
       {/* Chat panel */}
       {open && (
-        <Card className="fixed bottom-6 right-6 z-40 w-[calc(100vw-3rem)] sm:w-96 h-[32rem] flex flex-col shadow-2xl border-2 border-primary/20 overflow-hidden">
+        <Card className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] left-4 sm:bottom-6 sm:left-auto sm:right-24 z-40 w-[calc(100vw-2rem)] sm:w-96 h-[min(32rem,calc(100dvh-11rem))] sm:h-[32rem] flex flex-col shadow-2xl border-2 border-primary/20 overflow-hidden">
           {/* Header */}
           <div className="p-3 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white flex items-center justify-between">
             <div className="flex items-center gap-2">

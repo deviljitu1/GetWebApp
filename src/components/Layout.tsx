@@ -1,11 +1,10 @@
-import { useState } from 'react';
 import { Outlet, NavLink as RouterNavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { LayoutDashboard, Users, LogOut, Clock, Menu, X, ChevronRight, Activity, MessageSquare } from 'lucide-react';
+import { LayoutDashboard, Users, LogOut, Clock, ChevronRight, Activity, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import LunaAssistant from '@/components/LunaAssistant';
 import { AIAssistantWidget } from '@/components/AIAssistantWidget';
 import NotificationSettings from '@/components/NotificationSettings';
@@ -15,9 +14,6 @@ const Layout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -50,7 +46,6 @@ const Layout = () => {
               <RouterNavLink
                 key={item.to}
                 to={item.to}
-                onClick={() => setMobileOpen(false)}
                 className={cn(
                   'group flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200',
                   isActive
@@ -105,24 +100,7 @@ const Layout = () => {
         <SidebarContent />
       </aside>
 
-      {/* Mobile overlay */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50 md:hidden bg-background/80 backdrop-blur-sm animate-in fade-in">
-          <div className="fixed inset-y-0 left-0 w-[min(18rem,calc(100vw-3rem))] h-full shadow-2xl animate-in slide-in-from-left duration-300">
-            <SidebarContent />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-4 right-[-3rem] text-foreground bg-background/50 rounded-full"
-              onClick={() => setMobileOpen(false)}
-            >
-              <X className="h-6 w-6" />
-            </Button>
-          </div>
-        </div>
-      )}
-
-      <div className="flex-1 flex flex-col overflow-hidden relative">
+      <div className="min-w-0 flex-1 flex flex-col overflow-hidden relative">
         <OfflineBanner />
         {/* Mobile header */}
         <header className="md:hidden flex items-center justify-between px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] border-b bg-card/80 backdrop-blur-md sticky top-0 z-10">
@@ -134,9 +112,22 @@ const Layout = () => {
           </div>
           <div className="flex items-center gap-1">
             <NotificationSettings />
-            <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)}>
-              <Menu className="h-6 w-6" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full" aria-label="Account menu">
+                  <Avatar className="h-8 w-8 border border-border">
+                    <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name}`} />
+                    <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <div className="px-2 py-1.5 text-sm font-medium">{user?.name}</div>
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" /> Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </header>
 
@@ -152,6 +143,24 @@ const Layout = () => {
             <Outlet />
           </div>
         </main>
+        <nav aria-label="Main navigation" className="md:hidden shrink-0 border-t bg-card/95 px-2 pt-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
+          <div className="flex items-stretch justify-around gap-1">
+            {navItems.map(({ to, icon: Icon, label }) => (
+              <RouterNavLink
+                key={to}
+                to={to}
+                end
+                className={({ isActive }) => cn(
+                  'flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-1 py-2 text-[10px] font-medium leading-tight transition-colors',
+                  isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground active:bg-muted'
+                )}
+              >
+                <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
+                <span className="truncate max-w-full">{label}</span>
+              </RouterNavLink>
+            ))}
+          </div>
+        </nav>
       </div>
       {/* Floating AI assistant — all users */}
       <LunaAssistant />
