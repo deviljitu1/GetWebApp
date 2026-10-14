@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import LunaAssistant from '@/components/LunaAssistant';
 import { AIAssistantWidget } from '@/components/AIAssistantWidget';
 import NotificationSettings from '@/components/NotificationSettings';
 import OfflineBanner from '@/components/OfflineBanner';
@@ -162,8 +161,7 @@ const Layout = () => {
           </div>
         </nav>
       </div>
-      {/* Floating AI assistant — all users */}
-      <LunaAssistant />
+      {/* Unified AI Assistant for all users */}
       <AIAssistantWidget />
     </div>
   );

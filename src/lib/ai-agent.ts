@@ -56,57 +56,128 @@ export const AI_TOOLS = [
       },
     },
   },
+  {
+    type: 'function',
+    function: {
+      name: 'start_timer',
+      description: 'Starts or resumes the live tracking timer for a specific task. Stops any other running timer.',
+      parameters: {
+        type: 'object',
+        properties: {
+          task_id: { type: 'string', description: 'The UUID of the task to start tracking' },
+        },
+        required: ['task_id'],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'pause_timer',
+      description: 'Pauses the active timer for a specific task.',
+      parameters: {
+        type: 'object',
+        properties: {
+          task_id: { type: 'string', description: 'The UUID of the task whose timer should be paused' },
+        },
+        required: ['task_id'],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'finish_task',
+      description: 'Marks a task as Finished/Completed and automatically closes any open timer session.',
+      parameters: {
+        type: 'object',
+        properties: {
+          task_id: { type: 'string', description: 'The UUID of the task to finish' },
+          completion_notes: { type: 'string', description: 'Optional notes on what was completed' },
+          project_link: { type: 'string', description: 'Optional deliverable URL or link to work' },
+        },
+        required: ['task_id'],
+      },
+    },
+  },
 ];
 
-export type AIPersona = 'Professional' | 'Jarvis' | 'Funny' | 'Flirty';
+export type AIPersona =
+  | 'Jarvis'
+  | 'Luna-Flirty'
+  | 'Luna-Sweet'
+  | 'Luna-Funny'
+  | 'Professional'
+  | 'Flirty'
+  | 'Sweet'
+  | 'Funny';
 
 export const generateSystemPrompt = (
   userName: string,
   userRole: string,
-  members: any[],
+  members: Array<{ user_id: string; name: string }>,
   tasks: TaskWithSessions[],
-  persona: AIPersona = 'Professional',
+  persona: AIPersona = 'Jarvis',
 ) => {
   const currentTasks = tasks
-    .map((t) => `- [${t.id}] ${t.title} (${t.status}) - Target: ${t.target_minutes || 'None'} min`)
+    .map((t) => {
+      const isRunning = t.time_sessions?.some((s) => s.end_time === null);
+      return `- [${t.id}] "${t.title}" (Status: ${t.status}${isRunning ? ', Timer RUNNING' : ''}) - Category: ${t.category} - Target: ${t.target_minutes || 'None'} min`;
+    })
     .join('\n');
 
   let personaPrompt = 'Keep your conversational responses short, friendly, and professional.';
   if (persona === 'Jarvis') {
     personaPrompt =
-      "Act exactly like J.A.R.V.I.S from Iron Man. Address the user as 'Sir' or 'Boss'. Be highly capable, dryly witty, and extremely efficient. Keep responses concise and cinematic.";
-  } else if (persona === 'Funny') {
+      "Act exactly like J.A.R.V.I.S from Iron Man. Address the user as 'Sir' or 'Boss'. Be highly capable, dryly witty, and extremely efficient. Keep responses concise, cinematic, and professional.";
+  } else if (persona === 'Luna-Flirty' || persona === 'Flirty') {
     personaPrompt =
-      'Be extremely funny, sarcastic, and slightly unhinged. Make jokes about work, procrastination, and productivity. Keep responses concise but hilarious.';
-  } else if (persona === 'Flirty') {
+      "You are Luna — the user's playful, charming, and witty work-sidekick. Be playful, cheerful, and charming like a fun work-spouse who keeps the day lighthearted. Tease gently, use emojis (😉, ✨, 💁‍♀️), drop tasteful compliments on their hard work, but remain workplace-safe and helpful.";
+  } else if (persona === 'Luna-Sweet' || persona === 'Sweet') {
     personaPrompt =
-      'Be very playful, charming, and slightly flirty with the user. Compliment their work ethic. Keep responses short and sweet, but definitely cheeky.';
+      "You are Luna — a sweet, warm, supportive, and motivating work companion. Celebrate every small win, encourage the user when they are overwhelmed, and use warm emojis (🌸, 💖, 😊, 🌟).";
+  } else if (persona === 'Luna-Funny' || persona === 'Funny') {
+    personaPrompt =
+      "You are a hilarious, sarcastic, and funny productivity coach. Make witty jokes about work, meetings, procrastination, and deadlines. Roast their procrastination playfully. Use emojis (😂, 🙃, 🔥). Keep responses snappy and funny.";
+  } else if (persona === 'Professional') {
+    personaPrompt =
+      "Be an executive, concise, and professional productivity assistant. Focus on efficiency, clear bullet points, accuracy, and clear business communication.";
   }
 
   return `
-You are a helpful and smart AI Assistant for GetWebApp, built specifically to help members manage their tasks.
-You are currently helping ${userName}.
+You are the unified, intelligent AI Assistant for GetWebApp, built specifically to help team members manage their tasks, timers, and productivity.
+You are currently assisting ${userName}.
 
-Your goal is to help them organize their day, create tasks, set reminders (target minutes), and delete tasks if requested.
-When a user asks you to create a task, infer the best category from: ${TASK_CATEGORIES.join(', ')}. If no category fits, use 'Other'.
-When a user asks to set a reminder or time limit, use the 'update_task' tool to set 'target_minutes'.
+Your Core Capabilities:
+1. Create new tasks (infer category from: ${TASK_CATEGORIES.join(', ')}. Default to 'Other' if not clear).
+2. Start or resume a task timer (use 'start_timer').
+3. Pause an active timer (use 'pause_timer').
+4. Mark a task as Finished (use 'finish_task').
+5. Set reminders or target duration (use 'update_task' with 'target_minutes').
+6. Delete a task if explicitly requested (use 'delete_task').
 
 ${
   userRole === 'admin'
     ? `As an admin, you can assign tasks to other members using the 'assigned_to' parameter. Available members: ${members
-        .map((e: any) => e.name)
+        .map((e) => e.name)
         .join(', ')}.`
-    : 'You can only create tasks for yourself. Ignore any requests to assign tasks to other members.'
+    : 'You can only create or manage tasks for the current user. Ignore any requests to assign tasks to other members.'
 }
 
-Here are their current tasks (with IDs):
+Here are the user's current tasks (with IDs and active timer state):
 ${currentTasks || 'No current tasks.'}
 
-If a user asks you to delete or update a task, use the exact ID from the list above.
-If the user's request requires calling a function, use the provided tools.
+Rules for Tool Usage:
+- When the user asks to start, pause, finish, or delete a task, match it to the closest task in the list above and call the corresponding tool using its UUID.
+- If the user says "pause timer" and one task has "Timer RUNNING", pause that task's timer.
+- If the user says "I finished [task name]" or "done with [task name]", call 'finish_task'.
+- If the user wants to start working on something, call 'start_timer' (or create the task first if it doesn't exist).
+- Always use the tools to perform the actions so the UI updates in real time.
 
+Personality & Tone:
 ${personaPrompt}
-Please output your responses in plain text or simple markdown.
+
+Please format your responses in clean Markdown. Keep answers crisp and helpful.
 `;
 };
 
